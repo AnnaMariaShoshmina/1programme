@@ -74,7 +74,7 @@ ax.add_patch(c)
 
 for p in coordinates:
     plt.plot(
-    *[[v[c] for v in p] for c in [0,1]]
+        *[[v[c] for v in p] for c in [0,1]]
     )
     
 plt.show()
