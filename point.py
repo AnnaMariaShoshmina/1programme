@@ -24,6 +24,8 @@ class MaterialPoint:
             return -G / dist ** 2 
     
     def force_induced_by_other(self, other: 'MaterialPoint')-> 'numpy.array':
+        if self ==other:
+            return numpy.array([0,0])
         delta_p = other.position - self.position
         distance = numpy.linalg.norm(delta_p)  
         force_direction = delta_p / distance
@@ -40,44 +42,38 @@ class MaterialPoint:
 
 
 centrum = MaterialPoint(500.0, numpy.array([0.0, 0.0]), numpy.array([0.0, 0.0]))
-point_1 = MaterialPoint(10.0, numpy.array([50.0, 0.0]), numpy.array([0.0, 15.0]))
-point_2 = MaterialPoint(10.0, numpy.array([50.0, 40.0]), numpy.array([-7.0, 7.0]))
-point_3 = MaterialPoint(10.0, numpy.array([50.0, 21.0]), numpy.array([0.0, 16.0]))
 
+points = [
+MaterialPoint(10.0, numpy.array([50.0, 0.0]), numpy.array([0.0, 15.0])),
+MaterialPoint(10.0, numpy.array([50.0, 40.0]), numpy.array([-7.0, 7.0])),
+MaterialPoint(10.0, numpy.array([50.0, 21.0]), numpy.array([0.0, 16.0]))
+]
 
 def model_step():
-    point_1.apply_force(point_1.force_induced_by_other(centrum))
-    point_2.apply_force(point_2.force_induced_by_other(centrum))
-    point_3.apply_force(point_3.force_induced_by_other(centrum))
+    for p1 in points:
+        p1.apply_force(p1.force_induced_by_other(centrum))         
+        for p2 in points:
+            p1.apply_force(p1.force_induced_by_other(centrum))           
+    for p3 in points:
+        p3.advance()
 
-    point_1.advance()
-    point_2.advance()
-    point_3.advance()
-
-    
-
-xs_1 = []
-ys_1 = []
-xs_2 = []
-ys_2 = []
-xs_3 = []
-ys_3 = []
+coordinates: 'list[listnumpy.array]]' = []
+        
 for stepn in range(int(time_to_model / model_delta_t)):
-    xs_1.append(point_1.position[0])
-    ys_1.append(point_1.position[1])
-    xs_2.append(point_2.position[0])
-    ys_2.append(point_2.position[1])
-    xs_3.append(point_3.position[0])
-    ys_3.append(point_3.position[1])
+    coordinates.append([
+        p.position.copy() for p in points
+    ])
     model_step()
 
+coordinates = list(map(list, zip(*coordinates))))
+    
 c = plt.Circle((0, 0), 2, color='b')
 fig = plt.figure()
 ax = fig.add_subplot(1, 1, 1)
 ax.add_patch(c)
 
-plt.plot(xs_1,ys_1)
-plt.plot(xs_2,ys_2)
-plt.plot(xs_3,ys_3)
+for p in coordinates:
+    plt.plot(p)
+
 
 plt.show()
