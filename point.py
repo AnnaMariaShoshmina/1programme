@@ -73,7 +73,8 @@ ax = fig.add_subplot(1, 1, 1)
 ax.add_patch(c)
 
 for p in coordinates:
-    plt.plot(p)
-
-
+    plt.plot(
+    *[[v[c] for v in p] for c in [0,1]]
+    )
+    
 plt.show()
