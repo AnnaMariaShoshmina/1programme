@@ -65,8 +65,8 @@ for stepn in range(int(time_to_model / model_delta_t)):
     ])
     model_step()
 
-coordinates = list(map(list, zip(*coordinates)))
-    
+coordinates = zip(*coordinates)
+
 c = plt.Circle((0, 0), 2, color='b')
 fig = plt.figure()
 ax = fig.add_subplot(1, 1, 1)
