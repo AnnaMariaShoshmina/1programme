@@ -1,18 +1,14 @@
 def gcd(a,b):
     while b:
         a %= b
-        c = a
-        a = b
-        b = c
+        a,b = b,a
     return a
 
-def egcdbody(a,b):
-    if b == 0:
-        return(1,0)
-    x,y = egcdbody(b,a%b)
-    return (y,x-int(a/b)*y)
+def egcd(x,y):
+    i = 0
+    if y == 0:
+        return(1, 0, gcd (x,y))
+    x1,y1,i = egcd(y,x%y)
+    return (y1, x1 - x // y * y1, gcd (x,y))
     
-def egcd(a,b):
-    x,y = egcdbody(a,b)
-    return(x,y,gcd(a,b))
-print (egcd (21,133))
+print (egcd (21,35))
