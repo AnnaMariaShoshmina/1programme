@@ -1,0 +1,14 @@
+{%extends "base.html" %}
+
+{%block content %}
+
+<p>Translator</p>
+
+<form action = "/translate" method = "GET">
+    <input type="text", name="text", value="{{txt}}" />
+    <input type="submit", value="get">
+</form>
+
+<p>{{res}} </p>
+
+{%endblock%}
